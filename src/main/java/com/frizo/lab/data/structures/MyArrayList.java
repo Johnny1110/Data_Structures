@@ -1,10 +1,6 @@
 package com.frizo.lab.data.structures;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class MyArrayList<T> implements List<T> {
     int size;                    // keeps track of the number of elements
@@ -39,8 +35,14 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean add(T element) {
-        // TODO: FILL THIS IN!
-        return false;
+        if (size >= array.length) {
+            T[] biggerArray = (T[]) new Object[array.length *2];
+            System.arraycopy(array, 0, biggerArray, 0, array.length);
+            array = biggerArray;
+        }
+        array[size] = element;
+        size++;
+        return true;
     }
 
     @Override
@@ -105,7 +107,11 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public int indexOf(Object target) {
-        // TODO: FILL THIS IN!
+        for (int i = 0; i < size; i++){
+            if (equals(target, array[i])){
+                return i;
+            }
+        }
         return -1;
     }
 
@@ -114,7 +120,7 @@ public class MyArrayList<T> implements List<T> {
      * Handles the special case that the target is null.
      *
      * @param target
-     * @param object
+     * @param element
      */
     private boolean equals(Object target, Object element) {
         if (target == null) {
@@ -176,8 +182,18 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public T remove(int index) {
-        // TODO: FILL THIS IN!
-        return null;
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException();
+        }
+        T val = array[index];
+        size -= 1;
+        for (int i = index; i < size; i++){
+            array[i] = array[i+1];
+        }
+        if (index == size) {
+            array[index] = null;
+        }
+        return val;
     }
 
     @Override
@@ -196,8 +212,15 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public T set(int index, T element) {
-        // TODO: FILL THIS IN!
-        return null;
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
+        if (element == null){
+            throw new NullPointerException();
+        }
+        T oldVal = array[index];
+        array[index] = element;
+        return oldVal;
     }
 
     @Override
